@@ -8,6 +8,7 @@ namespace enc {
     private:
         T encrypted;
         T key;
+        static constexpr T scaleFactor = 3;
         static const int rounds = 10;
 
         T generateKey() {
@@ -17,8 +18,8 @@ namespace enc {
         T encrypt(T value) const {
             T result = value;
             for (int i = 0; i < rounds; ++i) {
-                result += key;
-                result *= 1.2;
+                result = result + key;
+                result = result * scaleFactor;
             }
             return result;
         }
@@ -26,8 +27,8 @@ namespace enc {
         T decrypt(T value) const {
             T result = value;
             for (int i = rounds - 1; i >= 0; --i) {
-                result /= 1.2;
-                result -= key;
+                result = result / scaleFactor;
+                result = result - key;
             }
             return result;
         }
